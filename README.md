@@ -1,6 +1,6 @@
 # hello-world
 
-Hi everyone!
+Hi, this is the "feature" branch. I am here~
 
 Let's fight for a better furture!
 
