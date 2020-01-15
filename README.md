@@ -1,19 +1,18 @@
-# Simultaneous subject and cell clustering for single cell expression count data
+## SCSC: simultaneous Subject and Cell clustering for Single Cell expression count data
+This R package aims at the implementation of a nonparametric Bayesian model named SCSC for simultaneous subject subgroup discovery and cell type detection based on the scRNA-seq data from multiple subjects. SCSC does not need to prespecify the exact subject subgroup number or cell type number but only their upper bounds, and automatically induces subject subgroup structures and matches cell types across subjects. SCSC is directly applied to the scRNA-seq raw count data owing to its consideration of the data's dropouts, library sizes and over-dispersion. In this package, a blocked Gibbs sampler is carried out for Bayesian posterior inference of SCSC.
 
+For technical details, please refer to the arxiv paper: Qiuyu Wu, and Xiangyu Luo. "A nonparametric Bayesian approach to simultaneous subject and cell heterogeneity discovery for single cell RNA-seq data." arXiv:1912.08050  <https://arxiv.org/abs/1912.08050>.
 
-## Introduction
+## Prerequisites and Installation
 
-The function SCSC implements a nonparametric Bayesian model for simultaneous subject subgroup discovery and cell type detection based on the scRNA-seq data from multiple subjects. It does not need to prespecify the exact subject subgroup number or cell type number but only their upper bounds, and automatically induces subject subgroup structures and matches cell types across subjects. SCSC is directly applied to the scRNA-seq raw count data because it deliberately considers the data's dropouts, library sizes, and over-dispersion. In SCSC, a blocked Gibbs sampler is carried out for Bayesian posterior inference.
+1. R version >= 3.6.
+2. R packages: Rcpp (>= 1.0.3), RcppArmadillo (>= 0.9.800.1).
+3. Install the package SCSC.
+```
+devtools:install_github("QiuyuWu/SCSC")
+```
 
-For the technical details, please refer to our arxiv paper: Qiuyu Wu, and Xiangyu Luo. "A nonparametric Bayesian approach to simultaneous subject and cell heterogeneity discovery for single cell RNA-seq data." arXiv:1912.08050  <https://arxiv.org/abs/1912.08050>
-
-## Installation
-
-1. This package depends on R (>=3.6), please ensure that the version of R is appropriate.
-2. To make the installation procedure portable and comfortable, please install the following R packages first: Rcpp (>= 1.0.3), RcppArmadillo (>= 0.9.800.1).
-3. Install this package.
-
-## Example
+## Example Code
 
 ``` {r, eval=FALSE}
 library(SCSCwin)
@@ -39,17 +38,19 @@ t2 <- Sys.time()
 #time cost
 print(t2 - t1)
 
-#Compared with true subject subgroup labels
+#Compare the estimates with true subject subgroup labels
 table(Result$subject_subgroup_label, subject_subgroup_label_truth)
 
-#Compared with true cell type labels
+#Compare the estimates with true cell type labels
 cell_table <- table(Result$cell_type_label, cell_type_label_truth)
 cell_table
 
-#The following shows the summary of the absolute errors across genes within each subject subgroup
+#The following shows the summary of the absolute errors of estimated subject subgroup effects
+#across genes within each subject subgroup
 summary(abs(Result$subject_subgroup_effects - subject_subgroup_effects_truth))
 
-#The following shows the summary of the absolute errors across genes within each cell type
+#The following shows the summary of the absolute errors of estimated cell type effects
+#across genes within each cell type
 type_name <- rownames(which(cell_table > 0,T))
 cell_unique <- unique(Result$cell_type_label)
 summary(abs(Result$cell_type_effects[,c(which(type_name[1]==cell_unique)
@@ -58,7 +59,6 @@ summary(abs(Result$cell_type_effects[,c(which(type_name[1]==cell_unique)
 ```
  
 ## Remark
-
-* It is recommended to use Rstudio in order to display the results on the console during operation.
-* If you find any bugs in this package, please contact me: w.qy@ruc.edu.cn
+* If you are using the Windows operating system, you are suggested to use the R package in Rstudio.
+* If you have any questions regarding this package, please contact Qiuyu Wu at w.qy@ruc.edu.cn
 
